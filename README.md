@@ -12,7 +12,7 @@ There are no size restrictions for either the 1D or 2D functions.
 
 # Examples
 
-Below are simple examples of how faster you can undertand pictures by virtue of *Interleaver*'s data order.
+Below are simple examples of how much faster you can undertand pictures by virtue of *Interleaver*'s data order.
 
 ![Interleaver for 1D data](example_1d.gif)
 
