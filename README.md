@@ -14,11 +14,11 @@ There are no size restrictions for either the 1D or 2D functions.
 
 Below are simple examples of how faster you can undertand pictures by virtue of *Interleaver*'s data order.
 
-![Interleaver for 1D data](https://raw.githubusercontent.com/1ucasvb/interleaver/master/example_1d.gif)
+![Interleaver for 1D data](example_1d.gif)
 
 In 1D, we can understand this function's shape with about a quarter of the final data.
 
-![Interleaver for 2D data](https://raw.githubusercontent.com/1ucasvb/interleaver/master/example_2d.gif)
+![Interleaver for 2D data](example_2d.gif)
 
 In 2D, the partial data in *Interleaver* order is very helpful even without any sort of interpolation of missing data. Also, notice that *Interleaver* fills datapoints in a *quincunx* pattern, which results in much more useful visual information than a simple binary tree.
 
