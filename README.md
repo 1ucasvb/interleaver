@@ -20,6 +20,6 @@ In 1D, we can understand this function's shape with about a quarter of the final
 
 ![Interleaver for 2D data](example_2d.gif)
 
-In 2D, the partial data in *Interleaver* order is very helpful even without any sort of interpolation of missing data. Also, notice that *Interleaver* fills datapoints in a *quincunx* pattern, which results in much more useful visual information than a simple binary tree.
+In 2D, the partial data in *Interleaver* order is very helpful even without any sort of interpolation of missing data. Also, notice that *Interleaver* fills datapoints in a *quincunx* pattern, which results in much more useful visual information than a simple binary tree. As with other progressive rendering algorithms, after every 4^L points have been computed one has a full equally-spaced grid representing the L-th level of resolution if the dimensions are a power of two. These points can be directly used as a data array, which can be plotted with any type of interpolation. The benefit of interleaver is in producing useful visual data even before these thresholds, especially for dimensions which are not powers of two.
 
 (The algorithms could probably be greatly simplified with some clever math magic, but I haven't looked into it much. I've just been using the old function that has done the trick all these years.)
