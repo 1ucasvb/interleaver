@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     23189,        566]
-NotebookOptionsPosition[     21884,        535]
-NotebookOutlinePosition[     22600,        560]
-CellTagsIndexPosition[     22486,        554]
+NotebookDataLength[     23738,        580]
+NotebookOptionsPosition[     22432,        549]
+NotebookOutlinePosition[     23148,        574]
+CellTagsIndexPosition[     23034,        568]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -447,13 +447,16 @@ Cell[BoxData[
    RowBox[{
     RowBox[{"size2d", "=", 
      RowBox[{"{", 
-      RowBox[{"60", ",", "65"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
-   RowBox[{
+      RowBox[{"64", ",", "64"}], "}"}]}], ";", " ", 
+    RowBox[{"(*", " ", 
+     RowBox[{
+     "Not", " ", "restricted", " ", "to", " ", "powers", " ", "of", " ", 
+      "2"}], " ", "*)"}], "\[IndentingNewLine]", 
     RowBox[{"alldata2d", "=", 
      RowBox[{"Table", "[", "\[IndentingNewLine]", 
       RowBox[{
        RowBox[{"0.5", "+", 
-        RowBox[{"0.5", 
+        RowBox[{"0.45", 
          RowBox[{"Tanh", "[", 
           RowBox[{"2", 
            RowBox[{"Sin", "[", 
@@ -496,30 +499,40 @@ Cell[BoxData[
     RowBox[{
      RowBox[{"ArrayPlot", "[", "\[IndentingNewLine]", 
       RowBox[{
-       RowBox[{"1", "-", 
-        RowBox[{"SparseArray", "[", "\[IndentingNewLine]", 
-         RowBox[{"Join", "[", "\[IndentingNewLine]", 
-          RowBox[{
-           RowBox[{"{", 
-            RowBox[{"size2d", "\[Rule]", "0"}], "}"}], ",", 
-           "\[IndentingNewLine]", 
-           RowBox[{"Table", "[", "\[IndentingNewLine]", 
+       RowBox[{"SparseArray", "[", "\[IndentingNewLine]", 
+        RowBox[{"Join", "[", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"size2d", "\[Rule]", "0"}], "}"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"Table", "[", "\[IndentingNewLine]", 
+           RowBox[{
             RowBox[{
-             RowBox[{
-              RowBox[{"is2d", "[", 
-               RowBox[{"[", "p", "]"}], "]"}], "\[Rule]", 
-              RowBox[{"alldata2d", "[", 
-               RowBox[{"[", 
-                RowBox[{"Sequence", "@@", 
-                 RowBox[{"is2d", "[", 
-                  RowBox[{"[", "p", "]"}], "]"}]}], "]"}], "]"}]}], ",", 
-             "\[IndentingNewLine]", 
-             RowBox[{"{", 
-              RowBox[{"p", ",", "1", ",", "n"}], "}"}]}], 
-            "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", "]"}], 
-         "\[IndentingNewLine]", "]"}]}], ",", "\[IndentingNewLine]", 
+             RowBox[{"is2d", "[", 
+              RowBox[{"[", "p", "]"}], "]"}], "\[Rule]", 
+             RowBox[{"alldata2d", "[", 
+              RowBox[{"[", 
+               RowBox[{"Sequence", "@@", 
+                RowBox[{"is2d", "[", 
+                 RowBox[{"[", "p", "]"}], "]"}]}], "]"}], "]"}]}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"{", 
+             RowBox[{"p", ",", "1", ",", "n"}], "}"}]}], 
+           "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", "]"}], 
+        "\[IndentingNewLine]", "]"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"ColorFunction", "\[Rule]", 
+        RowBox[{"Function", "[", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"#", ">", "0.05"}], ",", 
+           RowBox[{"Hue", "[", 
+            RowBox[{"#", ",", "1", ",", "1"}], "]"}], ",", "Black"}], "]"}], 
+         "]"}]}], ",", "\[IndentingNewLine]", 
        RowBox[{"ColorFunctionScaling", "\[Rule]", "False"}], ",", 
        "\[IndentingNewLine]", 
+       RowBox[{"PlotRange", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1"}], "}"}]}], ",", "\[IndentingNewLine]", 
        RowBox[{"Frame", "\[Rule]", "False"}], ",", "\[IndentingNewLine]", 
        RowBox[{"PixelConstrained", "\[Rule]", 
         RowBox[{"{", 
@@ -531,7 +544,8 @@ Cell[BoxData[
      "\[IndentingNewLine]", 
      RowBox[{"SaveDefinitions", "\[Rule]", "True"}]}], "\[IndentingNewLine]", 
     "]"}]}]}]], "Input",
- CellLabel->"In[15]:=",ExpressionUUID->"2567085d-175a-4f06-858b-eb1bc071b1b9"]
+ CellLabel->
+  "In[170]:=",ExpressionUUID->"2567085d-175a-4f06-858b-eb1bc071b1b9"]
 },
 WindowSize->{1920, 960},
 WindowMargins->{{0, Automatic}, {0, Automatic}},
@@ -553,8 +567,8 @@ CellTagsIndex->{
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"DefInterleaver1D", 22175, 545},
- {"DefInterleaver2D", 22330, 548}
+ {"DefInterleaver1D", 22723, 559},
+ {"DefInterleaver2D", 22878, 562}
  }
 *)
 (*NotebookFileOutline
@@ -567,7 +581,7 @@ Cell[13302, 317, 332, 10, 6, "Text",ExpressionUUID->"c11dad6b-6571-4035-89e8-309
 Cell[13637, 329, 459, 12, 127, "Text",ExpressionUUID->"c322ddf5-2243-4c4e-bc84-8f7140023209"],
 Cell[14099, 343, 4147, 97, 449, "Input",ExpressionUUID->"6d961d8a-56d2-4996-a3b5-67582a598c4b",
  CellTags->"DefInterleaver2D"],
-Cell[18249, 442, 3631, 91, 607, "Input",ExpressionUUID->"2567085d-175a-4f06-858b-eb1bc071b1b9"]
+Cell[18249, 442, 4179, 105, 653, "Input",ExpressionUUID->"2567085d-175a-4f06-858b-eb1bc071b1b9"]
 }
 ]
 *)
