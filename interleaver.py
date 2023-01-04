@@ -1,81 +1,83 @@
 from collections import deque
 from math import log2, ceil, pow
 
-# List interleaver for progressive rendering of 1D data | Lucas V. B.
-# Returns a vector from (start) to (end), inclusive.
-# No restrictions at all on start or end values, other than being integers.
-# Useful for "progressive rendering", by picking values at finer and finer resolutions last
-# Example:
-#     Interleaver1D(0,10)
-# {0, 10, 5, 2, 7, 1, 3, 6, 8, 4, 9}
-def Interleaver1D(start, end):
-	start, end = min(start, end), max(start, end)
-	sec =  [0,0]
-	order = []
-	secs = deque()
+class Interleaver1D(object):
+	"""
+	List interleaver for progressive rendering of 1D data.
+	An iterator that interleaves values from `start` to `end`, inclusive,
+	ensuring `start` and `end` values are returned first.
+	No restrictions at all on `start` or `end` values, other than being integers.
+	This is useful for "progressive rendering" by picking coarse-grained values first,
+	and finer resolutions last.
 	
-	# Size of interval
-	w = end - start
+	Example:
+		list(Interleaver1D(0, 10)) -> [0, 10, 5, 2, 7, 1, 3, 6, 8, 4, 9]
+	"""
+	def __init__(self, start: int, end: int) -> None:
+		if not isinstance(start, int) or not isinstance(end, int):
+			raise TypeError("Interleaver1D requires integer arguments.")
+		start, end = min(start, end), max(start, end)
+		self.secs = deque()
+		self.secs.appendleft([start, start])
+		if end-start >= 1:
+			self.secs.appendleft([end, end])
+		if end-start >= 2:
+			self.secs.appendleft([start+1, end-1])
 	
-	# If negative, invalid, return empty list
-	if w < 0: return order
+	def __iter__(self):
+		return self
 	
-	# First and last items go first
-	order.append(start)
-	if w == 0: return order
-	order.append(end)
-	
-	# If anything else, we interleave recursively
-	if w > 1:
-		# Create a subinterval
-		secs.appendleft(start+1)
-		secs.appendleft(end-1)
-		while len(secs):
-			sec[0] = secs.pop()
-			sec[1] = secs.pop()
-			w = sec[1] - sec[0]
-			if w == 0:
-				order.append(sec[0])
-				continue
-			if w == 1:
-				order.append(sec[0])
-				secs.appendleft(sec[1])
-				secs.appendleft(sec[1])
-				continue
-			c = (sec[0] + sec[1]) // 2
-			order.append(c)
-			secs.appendleft(sec[0])
-			secs.appendleft(c-1)
-			secs.appendleft(c+1)
-			secs.appendleft(sec[1])
-	
-	return order
+	def __next__(self):
+		if not self.secs:
+			raise StopIteration
+		a, b = self.secs.pop()
+		if a == b:
+			return a
+		c = (a + b)//2
+		if a <= c-1:
+			self.secs.appendleft([a, c-1])
+		if c+1 <= b:
+			self.secs.appendleft([c+1, b])
+		return c
 
+class Interleaver2D(object):
+	"""
+	Array interleaver for progressive rendering of 2D data | Lucas V. B.
+	An iterator returning pairs of ints as coordinates (x,y) filling the (width,height) rectangle
+	progressively. Values range from (0, 0) to (width-1, height-1).
+	Width and height must be positive and non-zero, but any number is fine.
+	Powers of two are ideal, as less values are skipped in the while loop.
+	
+	Useful for "progressive rendering", by picking values at finer and finer resolutions last.
+	Example:
+	    Interleaver2D(4,5) -> [(0,0), (0,4), (2,2), (2,0), (2,4), (0,2), (1,1),
+	    (3,3), (3,1), (1,3), (1,0), (1,4),(3,2),(3,0),(3,4),(1,2),(0,1),(2,3),(2,1),(0,3)
+	]
+	
+	"""
+	def __init__(self, width: int, height: int) -> None:
+		if not isinstance(width, int) or not isinstance(height, int) or width <= 0 or height <= 0:
+			raise TypeError("Interleaver2D requires positive non-zero integer arguments.")
+		self.width, self.height = width, height
+		self.remaining = width*height
+		self.count = 0
+		self.levels = ceil(max(log2(width), log2(height))) # Recursion level
+	
+	def __iter__(self):
+		return self
+	
+	def __next__(self):
+		while self.remaining:
+			k = self.count
+			x, y = 0, 0
+			for i in range(self.levels):
+				d = k // int(pow(4, self.levels - i - 1))
+				k -= int(pow(4, self.levels - i - 1)) * d
+				x += (1 if (d == 1 or d == 2) else 0) * (1 << i)
+				y += (d % 2) * (1 << i)
+			self.count += 1
+			if x < self.width and y < self.height:
+				self.remaining -= 1
+				return (x,y)
+		raise StopIteration
 
-# Array interleaver for progressive rendering of 2D data | Lucas V. B.
-# Returns a vector with vector pairs of ints coordinates (x,y) filling the (width,height) rectangle
-# progressively.
-# width and height must be positive and non-zero, but any number is fine.
-# Useful for "progressive rendering", by picking values at finer and finer resolutions last.
-# Example:
-#     Interleaver2D(4,5)
-# [ [0,0], [0,4], [2,2], [2,0], [2,4], [0,2], [1,1], [3,3], [3,1], [1,3], [1,0],
-#  [1,4],[3,2],[3,0],[3,4],[1,2],[0,1],[2,3],[2,1],[0,3] ]
-
-def Interleaver2D(width, height):
-	order = []
-	levels = ceil(max( log2(width), log2(height) ))
-	t = width*height
-	n = 0
-	while len(order) < t:
-		k = n
-		x, y = 0, 0
-		for i in range(levels):
-			d = k // int(pow(4, levels - i - 1))
-			k -= int(pow(4, levels - i - 1)) * d
-			x += (1 if (d == 1 or d == 2) else 0) * (1 << i)
-			y += (d % 2) * (1 << i)
-		if x < width and y < height:
-			order.append((x,y))
-		n += 1
-	return order
